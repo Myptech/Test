@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       fontFamily: {
         bodyFont: "Nunito Sans",
+        poppins: ['Poppins', 'sans-serif'], // Объединил шрифты
       },
       backgroundImage: {
         "hero-image": "url('/assets/bg.jpg')",

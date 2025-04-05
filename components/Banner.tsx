@@ -9,7 +9,6 @@ const Banner = () => {
 
   function handleClick(e: any) {
     if (e.target.contains(ref.current)) {
-      // do something with myRef.current
       setMenu(false);
     }
   }
@@ -19,9 +18,10 @@ const Banner = () => {
   const [navColor, setnavColor] = useState("transparent");
 
   const listenScrollEvent = () => {
-    window.scrollY > 10 ? setnavColor("#000000") : setnavColor("transparent");
-    window.scrollY > 10 ? setnavSize("90px") : setnavSize("90px");
+    window.scrollY > 10 ? setnavColor("rgba(0, 0, 0, 0.8)") : setnavColor("transparent");
+    window.scrollY > 10 ? setnavSize("80px") : setnavSize("90px");
   };
+
   useEffect(() => {
     window.addEventListener("scroll", listenScrollEvent);
     return () => {
@@ -32,10 +32,26 @@ const Banner = () => {
   // ============ Nav style End here ===============
 
   const [menu, setMenu] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Detect if the user has scrolled to hide "scroll down" message
+  const handleScroll = () => {
+    if (window.scrollY > 50) {
+      setScrolled(true);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <div id="home" className="w-full h-[700px] relative">
+    <div id="home" className="w-full h-screen relative bg-cover bg-center bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
       <Design />
-      <div className="absolute left-0 top-0 w-full h-[700px] bg-black bg-opacity-10">
+      <div className="absolute left-0 top-0 w-full h-full bg-black bg-opacity-30 flex items-center justify-center">
         <nav
           style={{
             backgroundColor: navColor,
@@ -44,8 +60,8 @@ const Banner = () => {
           }}
           className="w-full px-16 py-6 flex justify-between fixed top-0 z-40 bg-black bg-opacity-25"
         >
-          <h1 className="font-bodyFont text-4xl text-white font-extrabold border-2 w-12 text-center">
-            S
+          <h1 className="font-bodyFont text-4xl text-white font-extrabold">
+            Portfolio Maker
           </h1>
           <div
             onClick={() => setMenu(true)}
@@ -56,19 +72,38 @@ const Banner = () => {
             <span className="w-full h-[3px] bg-designColor inline-flex group-hover:w-4 duration-300"></span>
           </div>
         </nav>
-        <div className="w-full h-full flex flex-col justify-center items-center text-white px-4">
-          <h1 className="text-[50px] md:text-[80px] lg:text-[100px] font-black">
-            I'm Sarah Jonson
+
+        <motion.div
+          className="w-full h-full flex flex-col justify-center items-center text-white px-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <h1 className="text-[60px] md:text-[80px] lg:text-[100px] font-black text-shadow-lg">
+            Сервис для создания портфолио
           </h1>
-          <div className="flex items-center gap-2 md:gap-6 text-base md:text-xl font-bold bg-designColor px-6 py-3">
-            <h2 className="tracking-[4px]">LEADER</h2>
+          <div className="flex items-center gap-2 md:gap-6 text-lg md:text-xl font-semibold bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 px-6 py-3 rounded-full">
+            <h2 className="tracking-[4px]">Быстро</h2>
             <HiMinus className="text-2xl rotate-90" />
-            <h2 className="tracking-[4px]">DESIGNER</h2>
+            <h2 className="tracking-[4px]">Удобно</h2>
             <HiMinus className="text-2xl rotate-90" />
-            <h2 className="tracking-[4px]">YOUTUBER</h2>
+            <h2 className="tracking-[4px]">Красиво</h2>
           </div>
-        </div>
+        </motion.div>
       </div>
+
+      {/* Прокрутите вниз */}
+      {!scrolled && (
+        <motion.div
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white text-xl font-semibold animate-bounce"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+        >
+          <p>Прокрутите вниз</p>
+        </motion.div>
+      )}
+
       {/* =========== Menu Icon status Start here ========= */}
       {menu && (
         <div
@@ -94,7 +129,7 @@ const Banner = () => {
                     onClick={() => setMenu(false)}
                   >
                     <li className="text-xl font-semibold text-gray-300 hover:text-white duration-300 cursor-pointer">
-                      Home
+                      Главная
                     </li>
                   </Link>
                   <Link
@@ -106,7 +141,7 @@ const Banner = () => {
                     onClick={() => setMenu(false)}
                   >
                     <li className="text-xl font-semibold text-gray-300 hover:text-white duration-300 cursor-pointer">
-                      About
+                      О нас
                     </li>
                   </Link>
                   <Link
@@ -118,7 +153,7 @@ const Banner = () => {
                     onClick={() => setMenu(false)}
                   >
                     <li className="text-xl font-semibold text-gray-300 hover:text-white duration-300 cursor-pointer">
-                      Portfolio
+                      Примеры
                     </li>
                   </Link>
                   <Link
@@ -130,7 +165,7 @@ const Banner = () => {
                     onClick={() => setMenu(false)}
                   >
                     <li className="text-xl font-semibold text-gray-300 hover:text-white duration-300 cursor-pointer">
-                      Testmonial
+                      Отзывы
                     </li>
                   </Link>
                   <Link
@@ -142,17 +177,16 @@ const Banner = () => {
                     onClick={() => setMenu(false)}
                   >
                     <li className="text-xl font-semibold text-gray-300 hover:text-white duration-300 cursor-pointer">
-                      Contact
+                      Контакты
                     </li>
                   </Link>
                 </ul>
               </div>
               <div className="text-lg font-thin mt-32">
-                <p>For project enquries</p>
+                <p>Для сотрудничества</p>
                 <p>
-                  or say 'Hello' -{" "}
                   <span className="font-semibold text-designColor">
-                    reactjsbd@gmail.com
+                    Porfolio_maker@support.com
                   </span>
                 </p>
               </div>
